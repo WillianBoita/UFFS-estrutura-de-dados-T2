@@ -12,7 +12,7 @@ void showDate(Data data);
 
 int dataComp(Data data1, Data data2);
 
-int getDiff(Data data1, Data data2);
+int getDiff(Data data1, Data data2, int dias[12]);
 
 int isLeapYear(int data);
 

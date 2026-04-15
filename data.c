@@ -6,20 +6,21 @@ int main() {
   Data d1, d2;
   int diasDoMes[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  setDate(&d1, 28, 2, 2000, diasDoMes);
-  setDate(&d2, 31, 12, 1988, diasDoMes);
+  setDate(&d1, 28, 2, 2024, diasDoMes);
+  setDate(&d2, 1, 3, 2024, diasDoMes);
 
-  //getDate(d1, 'Y');
+  getDate(d1, 'Y');
 
-  //showDate(d1);
+  showDate(d1);
+  showDate(d2);
 
-  //printf("Comparar data: %d\n", dataComp(d1, d2));
+  printf("Comparar data: %d\n", dataComp(d1, d2));
 
-  //printf("Ano bissexto: %d\n", isLeapYear(d1.ano));
+  printf("Ano bissexto: %d\n", isLeapYear(d1.ano));
 
-  //printf("Diferença em dias: %d\n", getDiff(d1, d2));
+  printf("Diferença em dias: %d\n", getDiff(d1, d2, diasDoMes));
 
-  printf("dias do ano: %d\n", getDayFromYear(d2, diasDoMes));
+  printf("dias do ano: %d\n", getDayFromYear(d1, diasDoMes));
 
   return 0;
 }
@@ -28,8 +29,8 @@ void setDate(Data *data, int dia, int mes, int ano, int dias[12]) {
   int copiaDias[12];
 
   for (int i = 0; i < 12; i++) {
-        copiaDias[i] = dias[i];
-    }
+      copiaDias[i] = dias[i];
+  }
 
   if(isLeapYear(ano)) {
     copiaDias[1] += 1;
@@ -87,11 +88,37 @@ int dataComp(Data data1, Data data2) {
   }
 };
 
-int getDiff(Data data1, Data data2) {
+int getDiff(Data data1, Data data2, int dias[12]) {
   int diff = 0;
-  if (data1.ano == data2.ano && data1.mes == data2.mes) {
-    diff = abs(data1.dia - data2.dia);
+  if (data1.ano == data2.ano) {
+    diff = abs(getDayFromYear(data1, dias) -  getDayFromYear(data2, dias));
   } else {
+    int maiorAno;
+    int menorAno;
+    Data maiorData;
+    Data menorData;
+
+    if (dataComp(data1, data2) == 1) {
+      maiorAno = data1.ano;
+      menorAno = data2.ano;
+
+      maiorData = data1;
+      menorData = data2;
+    } else if (dataComp(data1, data2) == -1) {
+      maiorAno = data2.ano;
+      menorAno = data1.ano;
+
+      maiorData = data2;
+      menorData = data1;
+    } else {
+      return 0;
+    }
+
+    diff = (isLeapYear(menorData.ano) ? 366 : 365 - getDayFromYear(menorData, dias)) + getDayFromYear(maiorData, dias);
+
+    for (int i = menorAno + 1; i < maiorAno; i++) {
+      diff += isLeapYear(i) ? 366 : 365;
+    }
     
   }
   
@@ -114,19 +141,16 @@ int isLeapYear(int data) {
 
 int getDayFromYear(Data data, int dias[12]) {
   int diasAcumulados = 0;
-  printf("fevereiro: %d\n", dias[1]);
 
-  for (int i = 0; i < data.mes; i++) {
-    printf("%d mes: %d\n", i, dias[i]);
-    if (i == data.mes - 1) {
-      diasAcumulados += data.dia;
-      printf("dia mes inicial: %d\n", data.dia);
-      continue;
-    }
-
+  for (int i = 0; i < data.mes - 1; i++) {
     diasAcumulados += dias[i];
+
+    if (i == 1 && isLeapYear(data.ano)) {
+      diasAcumulados++;
+    }
   }
-  
+
+    diasAcumulados += data.dia;
 
   return diasAcumulados;
 };
