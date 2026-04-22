@@ -6,21 +6,21 @@ int main() {
   Data d1, d2;
   int diasDoMes[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  setDate(&d1, 28, 2, 2024, diasDoMes);
-  setDate(&d2, 1, 3, 2024, diasDoMes);
-
-  getDate(d1, 'Y');
+  setDate(&d1, 10, 10, 2026, diasDoMes);
+  setDate(&d2, 1, 11, 2026, diasDoMes);
 
   showDate(d1);
   showDate(d2);
+
+  printf("Ano: %d\n",getDate(d2,'Y'));
+
+  printf("Diferença: %d dias\n",getDiff(d1, d2, diasDoMes));
 
   printf("Comparar data: %d\n", dataComp(d1, d2));
 
   printf("Ano bissexto: %d\n", isLeapYear(d1.ano));
 
-  printf("Diferença em dias: %d\n", getDiff(d1, d2, diasDoMes));
-
-  printf("dias do ano: %d\n", getDayFromYear(d1, diasDoMes));
+  printf("Dia %d do ano\n", getDayFromYear(d1, diasDoMes));
 
   return 0;
 }
@@ -48,15 +48,12 @@ void setDate(Data *data, int dia, int mes, int ano, int dias[12]) {
 
 int getDate(Data data, char opcao) {
   if ((opcao == 'Y' || opcao == 'y') && data.ano) {
-    printf("%d\n", data.ano);
     return data.ano;
 
   } else if ((opcao == 'M' || opcao == 'm') && data.mes) {
-    printf("%d\n", data.mes);
     return data.mes;
 
   } else if ((opcao == 'D' || opcao == 'd') && data.dia) {
-    printf("%d\n", data.dia);
     return data.dia;
 
   } else {
